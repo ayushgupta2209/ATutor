@@ -1148,4 +1148,23 @@ function tool_origin($path=''){
     }
 }
 
+function save_last_fid($fid, $pid = 0){
+
+	$curr_time = time();
+	$diff = $curr_time - $_SESSION['pid_time'];
+	if(isset($_SESSION['fid'])){
+			if ($diff > 0) {
+			$is_tracked = queryDB('SELECT * FROM %sforum_track WHERE member_id=%d AND content_id=%d AND forum_id=%d AND post_id=%d',array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $_SESSION['fid'], $_SESSION['pid']));
+			if(count($is_tracked) != 0){
+				$sql = "UPDATE %sforum_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND forum_id=%d AND post_id=%d";
+				$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $_SESSION['fid'], $_SESSION['pid'] ));
+			} else{
+				$result = queryDB("INSERT INTO %sforum_track VALUES (%d, %d, %d, %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $_SESSION['fid'], $_SESSION['pid'], $diff ));
+			}
+		}
+	}
+	$_SESSION['pid_time'] = $curr_time;
+	$_SESSION['fid']=$fid;
+	$_SESSION['pid']=$pid;
+}
 ?>

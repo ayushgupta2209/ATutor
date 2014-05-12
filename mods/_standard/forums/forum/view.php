@@ -61,6 +61,7 @@ if ($_REQUEST['reply']) {
 
 $pid = intval($_GET['pid']);
 
+save_last_fid($fid,$pid);
 $num_per_page = 10;
 if (!$_GET['page']) {
 	$page = 1;

@@ -33,7 +33,10 @@ $unset_session = array('login',
                        'OBSOLETE',
                        'EXPIRES',
                        'redirect_to',
-                       'token');
+                       'token',
+					   'fid',
+					   'pid',
+					   'pid_time');
 foreach ($unset_session as $session_name) {
     unset($_SESSION[$session_name]);
 }

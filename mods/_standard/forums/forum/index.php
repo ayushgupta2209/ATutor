@@ -28,7 +28,7 @@ if (!valid_forum_user($fid)) {
 	$msg->printErrors();
 	require(AT_INCLUDE_PATH.'footer.inc.php');
 }
-
+save_last_fid($fid);
 $_pages['mods/_standard/forums/forum/index.php']['title']    = get_forum_name($fid);
 $_pages['mods/_standard/forums/forum/index.php']['parent']   = 'mods/_standard/forums/forum/list.php';
 $_pages['mods/_standard/forums/forum/index.php']['children'] = array('mods/_standard/forums/forum/new_thread.php?fid='.$fid, 'search.php?search_within[]=forums');
