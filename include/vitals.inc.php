@@ -535,4 +535,17 @@ if (isset($_GET['submit_language']) && $_SESSION['valid_user'] === true) {
 if (isset($_SESSION['course_id']) && $_SESSION['course_id'] > 0) {
 	$_custom_head .= '    <script type="text/javascript" src="'.AT_print($_base_path, 'url.base').'jscripts/ATutorCourse.js"></script>';
 }
+
+/**
+ * Saves the forum duration if moved to other page except of forum posts
+ * @author	Ayush Gupta
+ * @date 13-05-2014
+ */
+if(isset($_SESSION['fid']) && !isset($_GET['fid']) && !($_GET['fid']!=0) && $_my_uri!='/Atutor/index.php?') {
+	save_last_fid();			
+	unset($_SESSION['fid']);
+	unset($_SESSION['pid']);
+	unset($_SESSION['pid_time']);
+}
+
 ?>
