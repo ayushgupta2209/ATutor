@@ -24,6 +24,7 @@ unset($_SESSION['is_admin']);
 unset($_SESSION['course_id']);
 unset($_SESSION['is_super_admin']);
 unset($_SESSION['dd_question_ids']);
+unset($_SESSION['login_time']);
 
 $_SESSION['prefs']['PREF_FORM_FOCUS'] = 1;
 

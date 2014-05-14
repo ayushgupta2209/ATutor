@@ -136,6 +136,7 @@ if (isset($this_login, $this_password)) {
         $_SESSION['is_guest']    = 0;
         $_SESSION['lang']        = $row['language'];
         $_SESSION['course_id']  = 0;
+        $_SESSION['login_time'] = time();
         $now = date('Y-m-d H:i:s');
 
         if ($auto_login == 1) {
