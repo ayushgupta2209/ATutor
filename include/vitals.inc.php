@@ -539,6 +539,7 @@ if (isset($_SESSION['course_id']) && $_SESSION['course_id'] > 0) {
 /**
  * Saves the forum duration if moved to other page except of forum posts
  * @author	Ayush Gupta
+ * IRC ayush1
  * @date 13-05-2014
  */
 if(isset($_SESSION['fid']) && !isset($_GET['fid']) && !($_GET['fid']!=0) && $_my_uri!='/Atutor/index.php?') {
@@ -548,4 +549,16 @@ if(isset($_SESSION['fid']) && !isset($_GET['fid']) && !($_GET['fid']!=0) && $_my
 	unset($_SESSION['pid_time']);
 }
 
+/**
+ * Saves the blog posts duration if moved to other page except of blog posts
+ * @author	Ayush Gupta
+ * IRC ayush1
+ * @date 15-06-2014
+ */
+if(isset($_SESSION['gid']) && !isset($_GET['gid']) && !($_GET['gid']!=0)) {
+	save_last_bpid();
+	unset($_SESSION['gid']);
+	unset($_SESSION['bpid']);
+	unset($_SESSION['bpid_time']);
+}
 ?>

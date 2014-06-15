@@ -1195,8 +1195,8 @@ function save_last_bpid($gid = 0, $bpid = 0){
 			if(count($is_tracked) != 0){
 				$sql = "UPDATE %sblog_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND group_id=%d AND post_id=%d";
 				$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $_SESSION['gid'], $_SESSION['bpid'] ));
-			} else{
-				$result = queryDB("INSERT INTO %sforum_track VALUES (%d, %d, %d, %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $_SESSION['gid'], $_SESSION['bpid'], $diff));
+			} else {
+				$result = queryDB("INSERT INTO %sblog_track VALUES (%d, %d, %d, %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $_SESSION['gid'], $_SESSION['bpid'], $diff));
 			}
 		}
 	}
