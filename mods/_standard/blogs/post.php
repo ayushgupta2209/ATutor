@@ -28,7 +28,8 @@ $auth = '';
 if (!query_bit($owner_status, BLOGS_AUTH_WRITE)) {
 	$auth = 'private=0 AND ';
 }
-
+//Saving user's last blog post access details and current time
+save_last_bpid($owner_id, $id);
 $sql = "SELECT member_id, private, date, title, body FROM %sblog_posts WHERE $auth owner_type=%d AND owner_id=%d AND post_id=%d ORDER BY date DESC";
 $post_row = queryDB($sql, array(TABLE_PREFIX, BLOGS_GROUP, $owner_id, $id), TRUE);
 

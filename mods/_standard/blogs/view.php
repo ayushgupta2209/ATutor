@@ -23,7 +23,8 @@ if (!($owner_status = blogs_authenticate($owner_type, $owner_id))) {
 	header('Location: index.php');
 	exit;
 }
-
+//Storing blog access time
+save_last_bpid($owner_id);
 // these will all by dynamically defined on the view page
 $_pages['mods/_standard/blogs/view.php']['title'] = blogs_get_blog_name(BLOGS_GROUP, $_REQUEST['oid']);
 $_pages['mods/_standard/blogs/view.php']['parent']    = 'mods/_standard/blogs/index.php';
