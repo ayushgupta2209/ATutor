@@ -1149,9 +1149,11 @@ function tool_origin($path=''){
 }
 
 /**
- * Stores and update the forum usage duration and counter.
+ * Stores and update the forum usage duration and counter. (fid: forum ID )
  * @author	Ayush Gupta
+ * @irc ayush1
  * @date 12-05-2014
+ * @ arg: $fid = forum Id , $ pid = post Id
  */
 function save_last_fid($fid = 0, $pid = 0){
 			
@@ -1174,4 +1176,35 @@ function save_last_fid($fid = 0, $pid = 0){
 		$_SESSION['pid']=$pid;
 	}
 }
+
+/**
+ * Stores and update the Blog Posts Usage duration and counter. (bpid: Blog Post ID)
+ * @author	Ayush Gupta
+ * @irc ayush1
+ * @date 15-06-2014
+ * @ arg: $gid = owner/group Id, $bpid = blog post Id
+ */
+ 
+function save_last_bpid($gid = 0, $bpid = 0){
+			
+	$curr_time = time();
+	if((isset($_SESSION['gid']) && isset($_SESSION['bpid'])) && isset($_SESSION['bpid_time'])){
+		$diff = $curr_time - $_SESSION['bpid_time'];
+		if ($diff > 0) {
+			$is_tracked = queryDB('SELECT * FROM %sblog_track WHERE member_id=%d AND content_id=%d AND group_id=%d AND post_id=%d',array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $_SESSION['gid'], $_SESSION['bpid']));
+			if(count($is_tracked) != 0){
+				$sql = "UPDATE %sblog_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND group_id=%d AND post_id=%d";
+				$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $_SESSION['gid'], $_SESSION['bpid'] ));
+			} else{
+				$result = queryDB("INSERT INTO %sforum_track VALUES (%d, %d, %d, %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $_SESSION['gid'], $_SESSION['bpid'], $diff));
+			}
+		}
+	}
+	if($gid != 0){
+		$_SESSION['bpid_time'] = $curr_time;
+		$_SESSION['gid']=$gid;
+		$_SESSION['bpid']=$bpid;
+	}
+}
+
 ?>
