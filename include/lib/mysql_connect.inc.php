@@ -16,13 +16,16 @@ if (AT_INCLUDE_PATH !== 'NULL') {
          if(defined('MYSQLI_ENABLED')){
             if($db_name == ''){
                 $db = new mysqli($db_host, $db_login, $db_password);
-                $db->query("SET NAMES 'utf8'"); 
+                //$db->query("SET NAMES 'utf8'"); 
+                $db->set_charset("utf8");
             }else{
                 $db = new mysqli($db_host, $db_login,$db_password, $db_name, $db_port);
-                $db->query("SET NAMES 'utf8'"); 
+                //$db->query("SET NAMES 'utf8'"); 
+                $db->set_charset("utf8");
             }
          } else{
             $db = @mysql_connect($db_host . ':' . $db_port, $db_login, $db_password);
+            
          }   
         if (!$db) {
             // AT_ERROR_NO_DB_CONNECT 
@@ -31,6 +34,7 @@ if (AT_INCLUDE_PATH !== 'NULL') {
             trigger_error('VITAL#Unable to connect to db.', E_USER_ERROR);
             exit;
         }
+
         return $db;
     }
 
@@ -160,7 +164,7 @@ function execute_sql($sql, $oneRow, $callback_func, $array_type){
     
         // Query DB and if something goes wrong then log the problem
         if(defined('MYSQLI_ENABLED')){
-               $result = $db->query($sql) or (error_log(print_r($db->error, true), 0) and $msg->addError($displayErrorMessage));                
+               $result = $db->query($sql) or (error_log(print_r($db->error . "\nSQL: " . $sql, true), 0) and $msg->addError($displayErrorMessage));                
 
         }else{
                $result = mysql_query($sql, $db) or (error_log(print_r(mysql_error(), true), 0) and $msg->addError($displayErrorMessage));
@@ -171,7 +175,7 @@ function execute_sql($sql, $oneRow, $callback_func, $array_type){
         // === null is for mysqli compatibility
         if (is_bool($result) || $result === null) {
             if ($oneRow) {
-                error_log(print_r($oneRowErrorMessage, true), 0);
+                //error_log(print_r($oneRowErrorMessage, true), 0);
                 $msg->addError($displayErrorMessage);
             }
             if(isset($callback_func)){
@@ -296,7 +300,23 @@ function at_db_error(){
 /// USED in classes/CSVExport.class.php & CSVImport.class.php
 function at_field_type($result, $i){
     if(defined('MYSQLI_ENABLED')){  
-        return $result->fetch_field_direct($i);  
+        // Convert mysqli integer types to mysql string types
+        $metatype = $result->fetch_field_direct($i)->type;
+        if(in_array($metatype, array('1','2','3','8','9'))){
+            return "int";
+        }else if (in_array($metatype, array('249','250','251','252',))){
+            return "blob";
+        }else if(in_array($metatype, array('247', '248', '253', '254'))){
+            return "string";
+        } else if(in_array($metatype, array('0', '4','5'))){
+            return "real";
+        }else if(in_array($metatype, array('12'))){
+            return "datetime";
+        }else if(in_array($metatype, array('10'))){
+            return "date";
+        }else if(in_array($metatype, array('7'))){
+            return "timestamp";
+        }  
     }else{
         return mysql_field_type($result, $i);    
     }
@@ -318,28 +338,20 @@ function at_free_result($result){
     }
 
 }
-function at_field_flags($result, $i){
+function at_is_field_a_primary_key($result, $i){
     if(defined('MYSQLI_ENABLED')){   
-        //return $result->field_flags($i); //Original
-        //return $result->fetch_fields();
-        
-        $primary_key = '';
-        while ($meta = $result->fetch_field()) {
-            if ($meta->flags & MYSQLI_PRI_KEY_FLAG) { 
-                $primary_key = $meta->name; 
-            }
-        }    
-        
-        return $primary_key;
-        
+        $meta = mysqli_fetch_field_direct($result, $i);
+
+        return $meta->flags & 2;
     }else{
-        return mysql_field_flags($result, $i);   
+        $flags = explode(' ', mysql_field_flags($result, $i));
+        return in_array('primary_key', $flags);
     }
 
 }
 function at_field_name($result, $i){
     if(defined('MYSQLI_ENABLED')){  
-        return $result->fetch_field_direct($i);
+        return $result->fetch_field_direct($i)->name;
     }else{
         return mysql_field_name($result, $i);   
     }

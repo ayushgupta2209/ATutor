@@ -2096,7 +2096,57 @@ ul#subnavlist {
 	border-bottom: 1px solid #DED29E;
 }
 
-ul#subnavlist li {
+ul#subnavlist li, ul#subsubnavlist li{
+  	background-color: transparent;
+	list-style: none;
+	display: inline-block;
+	text-align:center;
+	padding: .6em .5em .5em .5em;
+
+		    border-radius:.3em .3em 0 0;
+
+}
+ul#subnavlist li a, ul#subsubnavlist li a{
+	padding: .6em .5em .2em .5em;
+	border-radius:.3em .3em 0 0;
+	
+}
+ul#subnavlist li a:hover, ul#subnavlist li:hover, ul#subnavlist li a:focus{
+  
+}
+ul#subnavlist li.active, ul#subsubnavlist li.active{
+    background-image: linear-gradient(#F2F1C5, #D1C82E);
+    border-bottom: 3px solid #D26911;
+}
+
+ul#subnavlist li.active:hover, ul#subnavlist li.active:focus{
+    background-image: linear-gradient(#D1C82E, #F2F1C5);
+    border-bottom: 3px solid #D26911;
+}
+
+ul#subnavlist li a:hover, ul#subnavlist li a:focus{
+	background-color: #F6F4DA;
+    border-bottom: 3px solid #D26911;
+    background-image: linear-gradient(#F2F1C5, #D1C82E);
+    
+}
+ul#subsubnavlist li a:hover, ul#subsubnavlist li a:focus{
+	background-color: #F6F4DA;
+    background-image: linear-gradient(#F2F1C5, #D1C82E);
+
+}
+
+////* subsubnalist
+
+ul#subsubnavlist {
+	margin-top: 0px;
+	font-family:  Varela Round,Helvetica,Arial,serif;
+
+  	border-bottom: 3px solid transparent;
+	border-bottom: 1px solid #DED29E;
+}
+
+ul#subsubnavlist li{
   	background-color: transparent;
 	list-style: none;
 	display: inline-block;
@@ -2106,28 +2156,21 @@ ul#subnavlist li {
 		border-radius:.3em .3em 0 0;
 
 }
-ul#subnavlist li a{
+ul#subsubnavlist li a{
 	padding: .6em .5em .2em .5em;
 	border-radius:.3em .3em 0 0;
 	
 }
-ul#subnavlist li a:hover, ul#subnavlist li:hover, ul#subnavlist li a:focus{
-  
-}
-ul#subnavlist li.active{
-    background-image: linear-gradient(#F2F1C5, #D1C82E);
-    border-bottom: 3px solid #D26911;
-}
-ul#subnavlist li.active:hover, ul#subnavlist li.active:focus{
-    background-image: linear-gradient(#D1C82E, #F2F1C5);
-        border-bottom: 3px solid #D26911;
-}
-ul#subnavlist li a:hover, ul#subnavlist li a:focus{
+ul#subsubnavlist li a:hover, ul#subsubnavlist li a:focus{
 	background-color: #F6F4DA;
-    border-bottom: 3px solid #D26911;
     background-image: linear-gradient(#F2F1C5, #D1C82E);
-    
+
 }
+
+*/
+
+
+
 ul#subnavlist span.active{
 	background-color: #F6F4DA;
 	padding: .9em .6em 1.5em .6em;
@@ -3284,7 +3327,7 @@ ul#subnavlist li a, ul#subnavlist_i li a, ul#navlist_i li a  {
 	border-bottom: 3px solid #555555;
 	border-radius: .3em .3em 0em 0em;
 	-moz-border-radius: .3em .3em 0em 0em;
-	padding: .5em .5em .5em .5em;
+	padding: .46em .5em .46em .5em;
 	margin:0 !important;
 }
  ul#subnavlist_i li a{

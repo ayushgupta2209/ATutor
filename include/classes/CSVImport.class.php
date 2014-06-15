@@ -21,36 +21,25 @@ class CSVImport {
 	// public
 	// returns the primary_key, or false if there is none, or null if more than 1
 	function getPrimaryFieldName($table_name) {
-		global $db;
-
 		$field = false;
 
 		$sql = "SELECT * FROM %s%s WHERE 0";
 		$result = queryDBresult($sql, array(TABLE_PREFIX, $table_name));
 		$num_fields = at_num_fields($result);
-		$field = at_field_flags($result, $i);
-		/*
-        debug_to_log("FLAGS".at_field_flags($result, $i));
-		for ($i= 0; $i<$num_fields; $i++) {
-			//$flags = explode(' ', at_field_flags($result, $i));
-			$flags = explode(' ', at_field_flags($result, $i));
-			if (in_array('primary_key', $flags)) {
-				if ($field == false) {
-					$field = at_field_name($result, $i);
-				} else {
-					// there is more than one primary_key
-					return NULL;
-				}
-				debug_to_log("FIELD".$field);
-			}
-		}
-        */
-        if($field == false){
-            return NULL;
-            //debug_to_log("FIELD".$field);
-        }else{
-		    return $field;
-		}
+		
+        for ($i= 0; $i<$num_fields; $i++) {
+        	if (at_is_field_a_primary_key($result, $i)) {
+                if ($field == false) {
+                    $field = at_field_name($result, $i);
+                } else {
+                    // there is more than one primary_key
+                    return NULL;
+                }                
+            }
+        }
+
+        return $field;
+
 	}
 
 
@@ -58,7 +47,6 @@ class CSVImport {
 	// given a query result returns an array of field types.
 	// possible field types are int, string, datetime, or blob...
 	function detectFieldTypes($table_name) {
-		global $db;
 
 		$field_types = array();
 
@@ -88,25 +76,23 @@ class CSVImport {
 
 	// public
 	function import($tableName, $path, $course_id, $version) {
-		global $db;
 		static $table_id_map;
 
 		$fn_name = $tableName.'_convert';
 
 		// lock the tables
-
-		$lock_sql = 'LOCK TABLES %s%s WRITE, %scourses WRITE';
-		$result   = queryDB($lock_sql, array(TABLE_PREFIX,$tableName,TABLE_PREFIX));
+		$lock_sql = 'LOCK TABLES ' . TABLE_PREFIX . $tableName. ' WRITE, ' . TABLE_PREFIX . 'courses WRITE';
+		$result   = queryDB($lock_sql, array());
 
 		// get the field types
 		$field_types = $this->detectFieldTypes($tableName);
+
 		if (!$field_types) {
 			return FALSE;
 		}
 
 		// get the name of the primary field
 		$primary_key_field_name = $this->getPrimaryFieldName($tableName);
-
 		// read the rows into an array
 		$fp = @fopen($path . $tableName . '.csv', 'rb');
 
@@ -114,14 +100,11 @@ class CSVImport {
 
 		// get the name of the primary ID field and the next index
 		$next_id = 0;
-		if ($primary_key_field_name != '') {
+		if ($primary_key_field_name) {
 			// get the next primary ID
-
 			$sql     = 'SELECT MAX(%s) AS next_id FROM %s%s';
-			//$next_id  = queryDB($sql, array($primary_key_field_name, TABLE_PREFIX, $tableName), TRUE);
-			$next_id  = queryDB($sql, array($primary_key_field_name, TABLE_PREFIX, $tableName));
+			$next_id  = queryDB($sql, array($primary_key_field_name, TABLE_PREFIX, $tableName), TRUE);
 			$next_id = $next_id['next_id']+1;
-
 		}
 
 		$rows = array();
@@ -133,6 +116,7 @@ class CSVImport {
 			if (function_exists($fn_name)) {
 				$row = $fn_name($row, $course_id, $table_id_map, $version);
 			}
+
 			if (!$row) {
 				continue;
 			}
@@ -141,23 +125,26 @@ class CSVImport {
 			}
 
 			$table_id_map[$tableName][$row[0]] = $next_id;
+
 			if ($primary_key_field_name != NULL) {
 				$row[0] = $next_id;
 			}
 
 			$sql = 'REPLACE INTO '.TABLE_PREFIX.$tableName.' VALUES (';
+                foreach($row as $id => $field) {
+                    if (($field_types[$id] != 'int') && ($field_types[$id] != 'real')) {
+                        $field = $this->translateWhitespace($field);
+                    } else if ($field_types[$id] == 'int') {
+                        $field = intval($field);
+                    }
+                    $sql .= "'" . $field."',";
+                }
 
-			foreach($row as $id => $field) {
-				if (($field_types[$id] != 'int') && ($field_types[$id] != 'real')) {
-					$field = $this->translateWhitespace($field);
-				} else if ($field_types[$id] == 'int') {
-					$field = intval($field);
-				}
-				$sql .= "'" . $field."',";
-			}
 			$sql = substr($sql, 0, -1);
 			$sql .= ')';
 
+            //Escape % for compatibility with queryDB()
+            $sql = str_replace("%", "%%", $sql );
 			$result = queryDB($sql, array());
 			$i++;
 			$next_id++;
@@ -170,7 +157,6 @@ class CSVImport {
 		$lock_sql = 'UNLOCK TABLES';
 		$result   = queryDB($lock_sql, array());
 	}
-
 }
 
 ?>
