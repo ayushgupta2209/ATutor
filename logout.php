@@ -47,7 +47,10 @@ $unset_session = array('login',
 					   'pid',
 					   'pid_time',
 					   'login_time',
-                       'tool_origin');
+                       'tool_origin',
+					   'gid',
+					   'bpid',
+					   'bpid_time');
 foreach ($unset_session as $session_name) {
     unset($_SESSION[$session_name]);
 }
