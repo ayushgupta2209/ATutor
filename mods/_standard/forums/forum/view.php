@@ -181,6 +181,7 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 		echo '</ul>';
 		
 		echo '<div  class="forum-paginator">';
+        echo '<a name="post" id="post"></a>';
 		echo _AT('page').': ';
 		for ($i=1; $i<=$num_pages; $i++) {
 			if ($i == $page) {
@@ -193,6 +194,7 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 				echo ' <span class="spacer">|</span> ';
 			}
 		}
+		
 		echo '</div>';
 	}
 

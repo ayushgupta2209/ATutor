@@ -50,10 +50,14 @@ $unset_session = array('login',
                        'tool_origin',
 					   'gid',
 					   'bpid',
-					   'bpid_time');
+					   'bpid_time',
+                       'tool_origin',
+                       'message');
+//unset($msg);
 foreach ($unset_session as $session_name) {
     unset($_SESSION[$session_name]);
 }
+
 $_SESSION['isLoggedOutRecently'] = true;
 $msg->addFeedback('LOGOUT');
 header('Location: login.php');
