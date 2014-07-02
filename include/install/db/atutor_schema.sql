@@ -1438,6 +1438,25 @@ CREATE TABLE `member_login_attempt` (
 ) ENGINE=MyISAM;
 
 # --------------------------------------------------------
+# Table structure for table `tool_track`
+
+CREATE TABLE `tool_track` (
+  `member_id` mediumint(8) unsigned NOT NULL default '0',
+  `course_id` mediumint(8) unsigned NOT NULL default '0',
+  `content_id` mediumint(8) unsigned NOT NULL default '0',
+  `tool_name` varchar(50) NOT NULL,
+  `main_tool_id` mediumint(8) unsigned NOT NULL default '0',
+  `sub_tool_id` mediumint(8) unsigned NOT NULL default '0',
+  `counter` mediumint(8) unsigned NOT NULL default '0',
+  `duration` mediumint(8) unsigned NOT NULL default '0',
+  `last_accessed` TIMESTAMP NULL,  
+  KEY `member_id` (`member_id`),
+  KEY `content_id` (`content_id`),
+  KEY `main_tool_id` (`main_tool_id`),
+  KEY `sub_tool_id` (`sub_tool_id`)
+) ENGINE = MyISAM;
+
+# --------------------------------------------------------
 # Adding feature of blog subsription
 # Table structure for table `blog_subscription`
 # since 1.6.3
