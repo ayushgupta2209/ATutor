@@ -36,13 +36,6 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 	        WHERE course_id=%d AND member_id=%d GROUP BY content_id ORDER BY total_hits DESC";
 	$rows_hits = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], $_SESSION['member_id']));
 
-	$sql = "SELECT a.year,a.Avg_time, b.Your_avg_time FROM
-(SELECT `tool_name` as year, SUM(`duration`)/SUM(`counter`) as Avg_time FROM at_tool_track GROUP BY `tool_name`)a 
-JOIN (SELECT `tool_name` as year, SUM(`duration`)/SUM(`counter`) as Your_avg_time FROM at_tool_track WHERE `member_id` = 2 GROUP BY `tool_name`)b
-ON a.year = b.year";
-	$rows_hits1 = queryDB($sql);
-	
- echo json_encode($rows_hits1);
     if(count($rows_hits) > 0){
 	    foreach($rows_hits as $row){
 			if ($row['total'] == '') {
@@ -75,9 +68,42 @@ ON a.year = b.year";
 </tbody>
 </table>
 
+
 <span id = "bargraph"> 
 
 </span>
+
+<table class="data static" >
+<thead>
+<tr>
+	<th scope="col"><?php echo 'Tool'; ?></th>
+	<th scope="col"><?php echo 'Students_avg_time'; ?></th>
+	<th scope="col"><?php echo 'Your_avg_time'; ?></th>
+</tr>
+</thead>
+<?php
+
+	$sql = "SELECT a.tool,a.Avg_time, b.Your_avg_time FROM
+(SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Avg_time FROM at_tool_track GROUP BY `tool_name`)a 
+JOIN (SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Your_avg_time FROM at_tool_track WHERE `member_id` = $_SESSION[member_id] GROUP BY `tool_name`)b
+ON a.tool = b.tool";
+	$rows_hits1 = queryDB($sql);	
+ $row_hits =  json_encode($rows_hits1);
+ 
+    if(count($rows_hits1) > 0){
+	    foreach($rows_hits1 as $row){
+			
+			echo '<tr>';
+			echo '<td>' .  $row['tool'] . '</td>';
+			echo '<td>' . gmdate('H:i:s', (int)$row['Avg_time']) . '</td>';
+			echo '<td>' . gmdate('H:i:s', (int)$row['Your_avg_time']) . '</td>';
+			
+			echo '</tr>';
+		} //end while
+		echo '</tbody>';
+	}
+	?>
+</table>
 
 <?php require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
 <!DOCTYPE html>
@@ -147,7 +173,7 @@ var svg = d3.select("#bargraph").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var data = <?php echo json_encode($rows_hits1); ?>;
 console.log(data[0]);
-  x.domain(data.map(function(d) { return d.year; }));
+  x.domain(data.map(function(d) { return d.tool; }));
   
   svg.append("g")
       .attr("class", "x axis")
@@ -160,7 +186,7 @@ console.log(data[0]);
 	  .call(yAxisLeft)
 	.append("text")
 	  .attr("y", 20)
-	  .attr("dy", "-2em")
+	  .attr("dy", "-3em")
 	  .style("text-anchor", "end")
 	  .text("Avg_time");
 	
@@ -170,7 +196,7 @@ console.log(data[0]);
 	  .call(yAxisRight)
 	.append("text")
 	  .attr("y", 20)
-	  .attr("dy", "-2em")
+	  .attr("dy", "-3em")
 	  .attr("dx", "2em")
 	  .style("text-anchor", "end")
 	  .text("Your_Avg_time");
@@ -179,14 +205,14 @@ console.log(data[0]);
 
   bars.append("rect")
       .attr("class", "bar1")
-      .attr("x", function(d) { return x(d.year); })
+      .attr("x", function(d) { return x(d.tool); })
       .attr("width", x.rangeBand()/2)
       .attr("y", function(d) { return y0(d.Avg_time); })
 	  .attr("height", function(d,i,j) { return height - y0(d.Avg_time); }); 
 
   bars.append("rect")
       .attr("class", "bar2")
-      .attr("x", function(d) { return x(d.year) + x.rangeBand()/2; })
+      .attr("x", function(d) { return x(d.tool) + x.rangeBand()/2; })
       .attr("width", x.rangeBand() / 2)
       .attr("y", function(d) { return y1(d.Your_avg_time); })
 	  .attr("height", function(d,i,j) { return height - y1(d.Your_avg_time); }); 
