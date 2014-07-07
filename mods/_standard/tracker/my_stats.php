@@ -88,7 +88,7 @@ require('./css/student_bar_graph.css');
 </thead>
 <?php
 
-	$sql = "SELECT a.tool, a.Avg_time, b.Your_avg_time FROM
+	$sql1 = "SELECT a.tool, a.Avg_time, b.Your_avg_time FROM
 					(SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Avg_time 
 							FROM %stool_track 
 							WHERE `course_id` = %d 
@@ -98,10 +98,22 @@ require('./css/student_bar_graph.css');
 				WHERE `member_id` = %d AND `course_id` = %d
 				GROUP BY `tool_name`)b
 				ON a.tool = b.tool";
-	$rows_hits1 = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id']));
- 
-    if(count($rows_hits1) > 0){
-	    foreach($rows_hits1 as $row){
+	
+	$sql2 =	"SELECT 'CONTENT' as tool, a.Avg_time, b.Your_avg_time FROM
+					( SELECT SUM(`duration`)/SUM(`counter`) as Avg_time, `course_id`
+							FROM %smember_track 
+							WHERE `course_id` = %d )a
+					JOIN (SELECT SUM(`duration`)/SUM(`counter`) as Your_avg_time,
+							`course_id`
+				FROM %smember_track 
+				WHERE `member_id` = %d AND `course_id` = %d )b
+				ON a.course_id = b.course_id";
+				
+	$rows_hits1 = queryDB($sql1, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id']));
+	$rows_hits2 = queryDB($sql2, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id']));
+	$rows_hits = array_merge($rows_hits1,$rows_hits2);
+    if(count($rows_hits) > 0){
+	    foreach($rows_hits as $row){
 			
 			echo '<tr>';
 			echo '<td>' .  $row['tool'] . '</td>';
