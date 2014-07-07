@@ -83,12 +83,17 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 </thead>
 <?php
 
-	$sql = "SELECT a.tool,a.Avg_time, b.Your_avg_time FROM
-(SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Avg_time FROM at_tool_track GROUP BY `tool_name`)a 
-JOIN (SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Your_avg_time FROM at_tool_track WHERE `member_id` = $_SESSION[member_id] GROUP BY `tool_name`)b
-ON a.tool = b.tool";
-	$rows_hits1 = queryDB($sql);	
- $row_hits =  json_encode($rows_hits1);
+	$sql = "SELECT a.tool, a.Avg_time, b.Your_avg_time FROM
+					(SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Avg_time 
+							FROM %stool_track 
+							WHERE `course_id` = %d 
+							GROUP BY `tool_name`)a
+					JOIN (SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Your_avg_time 
+				FROM %stool_track 
+				WHERE `member_id` = %d AND `course_id` = %d
+				GROUP BY `tool_name`)b
+				ON a.tool = b.tool";
+	$rows_hits1 = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id']));
  
     if(count($rows_hits1) > 0){
 	    foreach($rows_hits1 as $row){
