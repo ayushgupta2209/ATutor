@@ -110,10 +110,6 @@ ON a.tool = b.tool";
 <meta charset="utf-8">
 <style>
 
-body {
-  font: 10px sans-serif;
-}
-
 .y.axisRight text {
     fill: orange;
 }
