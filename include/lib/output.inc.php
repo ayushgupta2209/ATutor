@@ -283,8 +283,8 @@ function _AT() {
 
         if (!($lang_et = cache($cache_life, 'lang', $lang.'_'.$name))) {
             /* get $_template from the DB */
-            $rows = queryDB('SELECT L.* FROM %slanguage_text L, %slanguage_pages P WHERE L.language_code="%s" AND L.term=P.term AND P.page="%s"', array(TABLE_PREFIX, TABLE_PREFIX, $lang, $_rel_url), FALSE);
-            
+            $rows = queryDB('SELECT L.* FROM %slanguage_text L, %slanguage_pages P WHERE L.language_code="%s" AND L.term=P.term AND P.page="%s" ORDER BY L.variable ASC', array(TABLE_PREFIX, TABLE_PREFIX, $lang, $_rel_url), FALSE);
+
             foreach($rows as $row) {
                 $row_term = $row['term'];
                 //Do not overwrite the variable that existed in the cache_template already.
@@ -311,15 +311,15 @@ function _AT() {
     if (empty($outString)) {
         // Note: the query below limits the returned data to one row to deal with the case that one language term has multiple text defined.
         // Using "_template" always has more priority over "_module". This logic should be fixed once we have support for _module terms.
-        $row = queryDB('SELECT L.* FROM %slanguage_text L WHERE L.language_code="%s" AND L.term="%s" ORDER BY variable DESC LIMIT 1', array(TABLE_PREFIX, $lang, $term), true);
-        
+
+        // Get custom language
+        $row = queryDB('SELECT L.* FROM %slanguage_text L WHERE L.language_code="%s" AND L.term="%s" ORDER BY variable ASC LIMIT 1', array(TABLE_PREFIX, $lang, $term), true);
         if(isset($row['term']) && isset($row['text'])){
             $row_term = $row['term'];
             // with queryDB() language replacement vars must go into the db with %%sd and a%%1 etc.
-            // and then when displayed have the extra % removed 
+            // and then when displayed have the extra % removed
             $outString = $_template[$row_term] = preg_replace('/\%\%/','%',stripslashes($row['text']));
         }
-
 
         $outString = isset($outString) ? (isset($args) && is_array($args) ? vsprintf($outString, $args) : $outString) : '';
 
