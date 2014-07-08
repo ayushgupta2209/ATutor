@@ -11,6 +11,16 @@ $this->_list['my_tracker'] = array('title_var'=>'my_tracker','file'=>'mods/_stan
 $_pages['mods/_standard/tracker/my_stats.php']['title_var'] = 'my_tracker';
 $_pages['mods/_standard/tracker/my_stats.php']['img']       = 'images/home-tracker.png';
 $_pages['mods/_standard/tracker/my_stats.php']['icon']      = 'images/home-tracker_sm.png';
+$_pages['mods/_standard/tracker/my_stats.php']['children']      = array('mods/_standard/tracker/content_details.php', 'mods/_standard/tracker/blog_details.php', 'mods/_standard/tracker/forum_details.php');
+
+$_pages['mods/_standard/tracker/content_details.php']['title_var'] = "content_details";
+$_pages['mods/_standard/tracker/content_details.php']['parent'] = 'mods/_standard/tracker/my_stats.php';
+
+$_pages['mods/_standard/tracker/forum_details.php']['title_var'] = "forum_details";
+$_pages['mods/_standard/tracker/forum_details.php']['parent'] = 'mods/_standard/tracker/my_stats.php';
+
+$_pages['mods/_standard/tracker/blog_details.php']['title_var'] = "blog_details";
+$_pages['mods/_standard/tracker/blog_details.php']['parent'] = 'mods/_standard/tracker/my_stats.php';
 
 $_pages['mods/_core/content/index.php']['children'][]  = 'mods/_standard/tracker/tools/index.php';
 
