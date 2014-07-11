@@ -1,7 +1,7 @@
-	var margin = {top: 80, right: 80, bottom: 80, left: 80};
-    var width = 600,                        //width
-    height = 500,                            //height
-    radius = 200,                            //radius
+	var margin = {top: 50, right: 80, bottom: 80, left: 80};
+    var width = 400,                        //width
+    height = 400,                            //height
+    radius = 150,                            //radius
     color = d3.scale.category20();     //builtin range of colors
 	var data = <?php echo json_encode($rows_hits); ?>; 
     var vis = d3.select("#piechart")
