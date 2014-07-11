@@ -29,21 +29,21 @@ require('./css/student_bar_graph.css');
 	</thead>
 	<?php
 		$sql1 = "SELECT a.tool, a.Avg_time, b.Your_avg_time FROM
-						(SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Avg_time 
+						(SELECT `tool_name` as tool, SEC_TO_TIME(SUM(`duration`)/SUM(`counter`)) as Avg_time 
 								FROM %stool_track 
 								WHERE `course_id` = %d 
 								GROUP BY `tool_name`)a
-						JOIN (SELECT `tool_name` as tool, SUM(`duration`)/SUM(`counter`) as Your_avg_time 
+						JOIN (SELECT `tool_name` as tool, SEC_TO_TIME(SUM(`duration`)/SUM(`counter`)) as Your_avg_time 
 					FROM %stool_track 
 					WHERE `member_id` = %d AND `course_id` = %d
 					GROUP BY `tool_name`)b
 					ON a.tool = b.tool";
 		
 		$sql2 =	"SELECT 'CONTENT' as tool, a.Avg_time, b.Your_avg_time FROM
-						( SELECT SUM(`duration`)/SUM(`counter`) as Avg_time, `course_id`
+						( SELECT SEC_TO_TIME(SUM(`duration`)/SUM(`counter`)) as Avg_time, `course_id`
 								FROM %smember_track 
 								WHERE `course_id` = %d )a
-						JOIN (SELECT SUM(`duration`)/SUM(`counter`) as Your_avg_time,
+						JOIN (SELECT SEC_TO_TIME(SUM(`duration`)/SUM(`counter`)) as Your_avg_time,
 								`course_id`
 					FROM %smember_track 
 					WHERE `member_id` = %d AND `course_id` = %d )b

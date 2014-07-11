@@ -1,5 +1,11 @@
+	function timeToSec(time) {
+		var t = time.split(':');
+		var sec = (+t[0])*60*60 + (+t[1])*60 + (+t[2]);
+		return sec;
+	}
+	console.log("a");
+	console.log(timeToSec("01:00:01"));
 	var data = <?php echo json_encode($rows_hits); ?>;
-	console.log(data[0]);
 	var margin = {top: 80, right: 80, bottom: 80, left: 80},
 		width = 600 - margin.left - margin.right,
 		height = 400 - margin.top - margin.bottom;
@@ -21,8 +27,8 @@
 		.attr("class", "graph")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	x.domain(data.map(function(d) { return d.tool; }));
-	y0.domain([0,d3.max(data, function(d) { return +d.Avg_time; })]);
-	y1.domain([0,d3.max(data, function(d) { return +d.Avg_time; })]);
+	y0.domain([0,d3.max(data, function(d) { return timeToSec(d.Avg_time) })]);
+	y1.domain([0,d3.max(data, function(d) { return timeToSec(d.Avg_time) })]);
 	svg.append("g")
 		.attr("class", "x axis")
 		.attr("transform", "translate(0," + height + ")")
@@ -41,7 +47,7 @@
 		.attr("dy", "-3em")
 		.attr("dx", "7em")
 		.style("text-anchor", "end")
-		.text("Student's Avg Time");
+		.text("Student's Avg Time(sec)");
 	
 	svg.append("g")
 		.attr("class", "y axis axisRight")
@@ -52,7 +58,7 @@
 		.attr("dy", "-3em")
 		.attr("dx", "3em")
 		.style("text-anchor", "end")
-		.text("Your Avg Time");
+		.text("Your Avg Time(sec)");
 
 	bars = svg.selectAll(".bar").data(data).enter();
 
@@ -60,12 +66,16 @@
 		.attr("class", "bar1")
 		.attr("x", function(d) { return x(d.tool); })
 		.attr("width", x.rangeBand()/2)
-		.attr("y", function(d) { return y0(d.Avg_time); })
-		.attr("height", function(d,i,j) { return height - y0(d.Avg_time); }); 
+		.attr("y", function(d) { return y0(timeToSec(d.Avg_time)); })
+		.attr("height", function(d,i,j) { return height - y0(timeToSec(d.Avg_time)); })
+		.append("title")
+        .text(function(d) { return d.Avg_time; }); 
 
 	bars.append("rect")
 		.attr("class", "bar2")
 		.attr("x", function(d) { return x(d.tool) + x.rangeBand()/2; })
 		.attr("width", x.rangeBand() / 2)
-		.attr("y", function(d) { return y1(d.Your_avg_time); })
-		.attr("height", function(d,i,j) { return height - y1(d.Your_avg_time); });
+		.attr("y", function(d) { return y1(timeToSec(d.Your_avg_time)); })
+		.attr("height", function(d,i,j) { return height - y1(timeToSec(d.Your_avg_time)); })
+		.append("title")
+        .text(function(d) { return d.Your_avg_time; });
