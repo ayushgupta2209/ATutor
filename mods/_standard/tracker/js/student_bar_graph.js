@@ -1,4 +1,3 @@
-<script>
 	var data = <?php echo json_encode($rows_hits); ?>;
 	console.log(data[0]);
 	var margin = {top: 80, right: 80, bottom: 80, left: 80},
@@ -69,5 +68,4 @@
 		.attr("x", function(d) { return x(d.tool) + x.rangeBand()/2; })
 		.attr("width", x.rangeBand() / 2)
 		.attr("y", function(d) { return y1(d.Your_avg_time); })
-		.attr("height", function(d,i,j) { return height - y1(d.Your_avg_time); }); 
-</script>
+		.attr("height", function(d,i,j) { return height - y1(d.Your_avg_time); });

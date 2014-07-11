@@ -69,6 +69,11 @@ require('./css/student_bar_graph.css');
 </table>
 </body>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<?php require(AT_INCLUDE_PATH.'footer.inc.php');
-	require('js/student_bar_graph.js'); ?>
+
+<?php require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
+<script>
+	<?php	
+		require('../../../jscripts/d3js/d3.v3.min.js'); 
+		require('js/student_bar_graph.js');
+	?>
+</script>
