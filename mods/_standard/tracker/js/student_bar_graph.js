@@ -3,8 +3,6 @@
 		var sec = (+t[0])*60*60 + (+t[1])*60 + (+t[2]);
 		return sec;
 	}
-	console.log("a");
-	console.log(timeToSec("01:00:01"));
 	var data = <?php echo json_encode($rows_hits); ?>;
 	var margin = {top: 80, right: 80, bottom: 80, left: 80},
 		width = 600 - margin.left - margin.right,

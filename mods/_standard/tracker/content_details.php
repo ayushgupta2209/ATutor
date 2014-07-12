@@ -29,21 +29,17 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 	</thead>
 	<tbody>
 		<?php
-			$sql = "SELECT content_id, COUNT(*) AS unique_hits,
+			$sql = "SELECT content_id AS tool_id, COUNT(*) AS unique_hits,
 				SUM(counter) AS total_hits,
 				SEC_TO_TIME(SUM(duration)/SUM(counter)) AS average_duration,
-				SUM(duration) AS total_duration_sec,
 				SEC_TO_TIME(SUM(duration)) AS total_duration, last_accessed
 			FROM %smember_track
 			WHERE course_id=%d AND member_id=%d GROUP BY content_id ORDER BY total_hits DESC";
 			$rows_hits = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], $_SESSION['member_id']));
 			if(count($rows_hits) > 0) {
 				foreach($rows_hits as &$row){
-					if ($row['total'] == '') {
-						$row['total'] = _AT('na');
-					}
 					echo '<tr>';
-					echo '<td><a href='.AT_BASE_HREF.url_rewrite('content.php?cid='.$row['content_id']). '>' . $contentManager->_menu_info[$row['content_id']]['title'] . '</a></td>';
+					echo '<td><a href='.AT_BASE_HREF.url_rewrite('content.php?cid='.$row['tool_id']). '>' . $contentManager->_menu_info[$row['tool_id']]['title'] . '</a></td>';
 					echo '<td>' . $row['total_hits'] . '</td>';
 					echo '<td>' . $row['total_duration'] . '</td>';
 					if ($row['last_accessed'] == '') {
@@ -53,7 +49,7 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 						echo '<td>' . AT_date(_AT('forum_date_format'), $row['last_accessed'], AT_DATE_MYSQL_DATETIME) . '</td>';
 					}
 					echo '</tr>';
-					$row['content_id'] = $contentManager->_menu_info[$row['content_id']]['title'];
+					$row['tool_id'] = $contentManager->_menu_info[$row['tool_id']]['title'];
 				} //end foreach
 				echo '</tbody>';
 			}

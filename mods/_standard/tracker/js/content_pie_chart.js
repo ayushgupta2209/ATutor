@@ -1,3 +1,8 @@
+	function timeToSec(time) {
+		var t = time.split(':');
+		var sec = (+t[0])*60*60 + (+t[1])*60 + (+t[2]);
+		return sec;
+	}	
 	var margin = {top: 50, right: 80, bottom: 80, left: 80};
     var width = 400,                        //width
     height = 400,                            //height
@@ -19,7 +24,7 @@
 		
 
     var pie = d3.layout.pie()           //this will create arc data for us given a list of values
-        .value(function(d) { return d.total_duration_sec; });    //we must tell it out to access the value of each element in our data array
+        .value(function(d) { return timeToSec(d.total_duration); });    //we must tell it out to access the value of each element in our data array
 
     var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
         .data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
@@ -31,4 +36,4 @@
                 .attr("fill", function(d, i) { return color(i); } ) //set the color for each slice to be chosen from the color function defined above
                 .attr("d", arc)
 				.append("title")
-        .text(function(d, i) { return data[i].content_id+'\n'+data[i].total_duration; });                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+        .text(function(d, i) { return data[i].tool_id+'\n'+data[i].total_duration; });                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
