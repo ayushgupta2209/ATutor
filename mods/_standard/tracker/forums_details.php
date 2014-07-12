@@ -31,7 +31,7 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 		<?php
 			$sql = "SELECT a.main_tool_id as tool_id, b.title, a.average_duration, a.total_duration, a.last_accessed FROM
 						(SELECT main_tool_id, SEC_TO_TIME(SUM(`duration`)/SUM(`counter`)) as average_duration, 
-						SEC_TO_TIME(SUM(`duration`)) as total_duration, last_accessed
+						SEC_TO_TIME(SUM(`duration`)) as total_duration, max(last_accessed) as last_accessed
 								FROM %stool_track 
 								WHERE `member_id` = %d AND `course_id` = %d AND `tool_name` = '%s'
 								GROUP BY `main_tool_id`)a
