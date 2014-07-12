@@ -17,14 +17,14 @@ require(AT_INCLUDE_PATH.'vitals.inc.php');
 require(AT_INCLUDE_PATH.'header.inc.php');
 require('./css/student_bar_graph.css');
 ?>
-<span id = "bargraph">  </span>
+<div id = "bargraph" align = "center">  </div>
 
 <table class="data static" >
 	<thead>
 		<tr>
 			<th scope="col"><?php echo 'Tool'; ?></th>
-			<th scope="col"><?php echo 'Students_avg_time'; ?></th>
-			<th scope="col"><?php echo 'Your_avg_time'; ?></th>
+			<th scope="col"><?php echo 'Student\'s Average Time'; ?></th>
+			<th scope="col"><?php echo 'Your Average Time'; ?></th>
 		</tr>
 	</thead>
 	<?php
@@ -56,8 +56,8 @@ require('./css/student_bar_graph.css');
 			foreach($rows_hits as $row){
 				echo '<tr>';
 				echo '<td><a href='.AT_BASE_HREF.url_rewrite('mods/_standard/tracker/'.strtolower($row['tool']).'_details.php').'>' . $row['tool'] . '</a> </td>';
-				echo '<td>' . gmdate('H:i:s', (int)$row['Avg_time']) . '</td>';
-				echo '<td>' . gmdate('H:i:s', (int)$row['Your_avg_time']) . '</td>';
+				echo '<td>' . $row['Avg_time'] . '</td>';
+				echo '<td>' . $row['Your_avg_time'] . '</td>';
 				
 				echo '</tr>';
 			} //end while
