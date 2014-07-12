@@ -17,7 +17,7 @@ require(AT_INCLUDE_PATH.'vitals.inc.php');
 require(AT_INCLUDE_PATH.'header.inc.php');
 ?>
 
-<span id="piechart"></span>
+<div id="piechart" align= "center"></div>
 <table class="data static" summary="">
 	<thead>
 		<tr>
