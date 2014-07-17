@@ -66,7 +66,9 @@ require(AT_INCLUDE_PATH.'header.inc.php');
 <?php require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
 <script>
 	<?php	
+	if($_SESSION['is_admin'] != 1) {
 		require('../../../jscripts/d3js/d3.v3.min.js');
 		require('js/content_pie_chart.js');
+	}
 	?>
 </script>

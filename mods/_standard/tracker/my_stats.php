@@ -63,6 +63,13 @@ require('./css/student_bar_graph.css');
 			} //end while
 			echo '</tbody>';
 		}
+		else {
+			if($_SESSION['is_admin'] == 1){
+				$msg->printInfos('TRACKING_NO');
+			} 
+			echo '<tr><td colspan="4">' . _AT('none_found') . '</td></tr>';
+			echo '</tbody>';
+		}
 	?>
 </table>
 </body>
@@ -71,7 +78,9 @@ require('./css/student_bar_graph.css');
 <?php require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
 <script>
 	<?php	
+	if($_SESSION['is_admin'] != 1) {
 		require('../../../jscripts/d3js/d3.v3.min.js'); 
 		require('js/student_bar_graph.js');
+	}
 	?>
 </script>
