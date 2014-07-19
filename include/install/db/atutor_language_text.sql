@@ -2918,6 +2918,7 @@ INSERT INTO `language_text` VALUES ('en', '_module', 'bbb_admin_setup', 'BigBlue
 ('en', '_template', 'tool_manager', 'Tool/Activity Manager', '2009-11-19 16:12:28', 'core modules'),
 ('en', '_template', 'tool_man_comment', 'Choose from the tools available in the course, to add activities to this content.', '2009-11-05 12:29:40', 'content tool manager'),
 ('en', '_template', 'tool_settings', 'Learner Supports', '2010-04-12 16:29:59', ''),
+('en', '_template', 'tool_stats', 'Tool Usage Statistics', '2014-07-20 00:19:29', 'Tool usage module Heading'),
 ('en', '_template', 'tool_summary', 'Tools Usage Summary', '2003-05-22 15:11:26', 'tracker'),
 ('en', '_template', 'top', 'Top', '2003-05-22 15:11:53', 'global alt text for jump to top link/icon'),
 ('en', '_template', 'topic', 'Topic', '2003-05-22 15:12:45', 'forum thread list column heading'),
