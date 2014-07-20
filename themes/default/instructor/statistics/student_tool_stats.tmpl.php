@@ -1,3 +1,4 @@
+<?php global $contentManager;?>
 <div class = "contentbox-stats">
 	<div class = "contentbox-report">
 		<table class="data static" summary="">
@@ -8,18 +9,18 @@
 			</thead>
 			<tr>
 				<td	title= "Content with Maximum Visits">	Maximum Visits	</td>
-				<td></td>
-				<td></td>
+				<td><?php echo $contentManager->_menu_info[$this->contentkeyVal['maxVisits'][0]]['title']; ?></td>
+				<td><?php echo $this->contentkeyVal['maxVisits'][1]; ?></td>
 			</tr>
 			<tr>
 				<td title = "Content with Maximum Time devoted">	Maximum Time devoted	</td>
-				<td></td>
-				<td></td>
+				<td><?php echo $contentManager->_menu_info[$this->contentkeyVal['maxTime'][0]]['title']; ?></td>
+				<td><?php echo $this->contentkeyVal['maxTime'][1]; ?></td>
 			</tr>
 			<tr>
 				<td	title= "Content with Maximum Visitors">	Maximum Visitors	</td>
-				<td></td>
-				<td></td>
+				<td><?php echo $contentManager->_menu_info[$this->contentkeyVal['maxVisitors'][0]]['title']; ?></td>
+				<td><?php echo $this->contentkeyVal['maxVisitors'][1]; ?></td>
 			</tr>
 		</table>
 	</div>
@@ -32,18 +33,18 @@
 			</thead>
 			<tr>
 				<td	title= "Blog with Maximum Visits" >	Maximum Visits	</td>
-				<td></td>
-				<td></td>
+				<td><?php echo $this->contentkeyVal['maxVisits'][0]; ?></td>
+				<td><?php echo $this->contentkeyVal['maxVisits'][1]; ?></td>
 			</tr>
 			<tr>
 				<td title= "Blog with Maximum Comments">	Maximum Comments	</td>
-				<td></td>
-				<td></td>
+				<td><?php echo $this->contentkeyVal['maxComments'][0]; ?></td>
+				<td><?php echo $this->contentkeyVal['maxComments'][1]; ?></td>
 			</tr>
 			<tr>
 				<td	title= "Blog with Maximum Visitors">	Maximum Visitors	</td>
-				<td></td>
-				<td></td>
+				<td><?php echo $this->contentkeyVal['maxVisitors'][0]; ?></td>
+				<td><?php echo $this->contentkeyVal['maxVisitors'][1]; ?></td>
 			</tr>
 		</table>
 	</div>
@@ -61,7 +62,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td title = "Forum with Maximum Posts">	Maximum Time devoted	</td>
+				<td title = "Forum with Maximum Posts">	Maximum Posts	</td>
 				<td></td>
 				<td></td>
 			</tr>
