@@ -15,7 +15,7 @@
 define('AT_INCLUDE_PATH', '../../../../include/');
 require(AT_INCLUDE_PATH.'vitals.inc.php');
 authenticate(AT_PRIV_CONTENT);
-
 require(AT_INCLUDE_PATH.'header.inc.php');
 
+$savant->display('instructor/statistics/student_tool_stats.tmpl.php');
 require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
