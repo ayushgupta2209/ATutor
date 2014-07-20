@@ -2719,6 +2719,20 @@ div.social-wrapper{
 .contentbox-b{
     padding-bottom:0.2em;
 }
+.contentbox-stats{
+    width: 100%;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.contentbox-report{
+	width: 48%;
+    float: left;
+    border: 1px solid #ACCFCC;
+    margin-left: 5px;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-right: 5px;
+}
 .logo{
 width:15em;
 margin-left:0em;
