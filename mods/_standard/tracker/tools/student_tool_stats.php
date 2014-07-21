@@ -27,11 +27,6 @@ $sql = "SELECT `content_id` , SUM( `counter`) as totalCount, COUNT(`member_id`) 
 	GROUP BY `content_id`";
 	
 $queryResult = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id']));
-$contentkeyValues = array (
-    "maxVisits"  => array(-1,0),
-    "maxVisitors" => array(-1,0),
-    "maxTime"   => array(-1,'00:00:00')
-);
 
 foreach ($queryResult as $row) {
 	if($contentkeyVal['maxVisits'][1] < $row['totalCount']) {
@@ -70,11 +65,6 @@ $sql = " SELECT d.title,  totalCount, uniqueCount, d.totalComments FROM
 	ON a.sub_tool_id = d.post_id";
 	
 $queryResult = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_PREFIX, TABLE_PREFIX));
-$blogkeyValues = array (
-    "maxVisits"  => array(-1,0),
-    "maxVisitors" => array(-1,0),
-    "maxComments"   => array(-1,'0')
-);
 
 foreach ($queryResult as $row) {
 	if($blogkeyVal['maxVisits'][1] < $row['totalCount']) {
@@ -91,7 +81,87 @@ foreach ($queryResult as $row) {
 	}
 }
 
+/*
+ * Fetch Data for Forum
+ * Process and sends the required values to template file
+ */
+
+ $sql = " SELECT d.title,  totalCount, uniqueCount, d.totalPosts FROM
+	(SELECT `main_tool_id` , SUM( `counter`) as totalCount, COUNT(`member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
+	FROM `%stool_track`
+	WHERE `course_id` =%d AND tool_name='FORUMS'
+	GROUP BY `main_tool_id`)a
+	JOIN
+	(SELECT b.forum_id, b.title, c.totalPosts FROM
+	(SELECT `forum_id`, `title` 
+	FROM `%sforums` 
+	WHERE 1)b
+	LEFT JOIN
+	(SELECT COUNT(`post_id`) as totalPosts, `forum_id` 
+	FROM %sforums_threads
+	GROUP BY `forum_id`)c
+	ON b.forum_id = c.forum_id)d
+	ON a.main_tool_id = d.forum_id";
+	
+$queryResult = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_PREFIX, TABLE_PREFIX));
+
+foreach ($queryResult as $row) {
+	if($forumkeyVal['maxVisits'][1] < $row['totalCount']) {
+		$forumkeyVal['maxVisits'][0] = $row['title'];
+		$forumkeyVal['maxVisits'][1] = $row['totalCount'];
+	}
+	if($forumkeyVal['maxVisitors'][1] < $row['uniqueCount']) {
+		$forumkeyVal['maxVisitors'][0] = $row['title'];
+		$forumkeyVal['maxVisitors'][1] = $row['uniqueCount'];
+	}
+	if($forumkeyVal['maxPosts'][1] < $row['totalPosts']) {
+		$forumkeyVal['maxPosts'][0] = $row['title'];
+		$forumkeyVal['maxPosts'][1] = $row['totalPosts'];
+	}
+}
+ 
+/*
+ * Fetch Data for Student Use
+ * Process and sends the required values to template file
+ */
+ 
+ $sql ="SELECT member_id, SEC_TO_TIME(AVG(time)) as AVG, COUNT(b.member_id) as count FROM
+			(SELECT a.member_id , SUM(a.duration) as time 
+		FROM(SELECT member_id, SUM(duration) as duration
+			FROM %smember_track
+			GROUP BY member_id
+		UNION ALL
+			SELECT member_id, SUM(duration) as duration
+			FROM %stool_track
+			GROUP BY member_id) a
+		GROUP BY a.member_id
+        ORDER BY time desc )b
+	LIMIT 1";
+
+$queryResult = queryDB($sql, array(TABLE_PREFIX, TABLE_PREFIX));
+$member_id = $queryResult[0]['member_id'];
+$average = $queryResult[0]['AVG'];
+$activeCount = $queryResult[0]['count'];
+
+$sql = "SELECT COUNT(member_id) count
+	FROM %scourse_enrollment
+	WHERE course_id = %d LIMIT 1";
+
+$queryResult = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id']));
+$totalCount = $queryResult[0]['count'];
+
+$sql = "SELECT first_name, last_name
+	FROM %smembers
+	WHERE member_id = %d
+	LIMIT 1";
+
+$queryResult = queryDB($sql, array(TABLE_PREFIX, $member_id));
+$activeStudent = $queryResult[0]['first_name']." ".$queryResult[0]['last_name'];
 $savant->assign('contentkeyVal', $contentkeyVal);
-$savant->assign('contentkeyVal', $blogkeyVal);
+$savant->assign('blogkeyVal', $blogkeyVal);
+$savant->assign('forumkeyVal', $forumkeyVal);
+$savant->assign('percentage', (int)(($activeCount/$totalCount)*100));
+$savant->assign('average', $average);
+$savant->assign('activeStudent', $activeStudent);
 $savant->display('instructor/statistics/student_tool_stats.tmpl.php');
 require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
