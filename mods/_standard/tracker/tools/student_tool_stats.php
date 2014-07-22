@@ -48,7 +48,7 @@ foreach ($queryResult as $row) {
  * Process and sends the required values to template file
  */
 $sql = " SELECT d.title,  totalCount, uniqueCount, d.totalComments FROM
-	(SELECT `sub_tool_id` , SUM( `counter`) as totalCount, COUNT(`member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
+	(SELECT `sub_tool_id` , SUM( `counter`) as totalCount, COUNT(DISTINCT `member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
 	FROM `%stool_track`
 	WHERE `course_id` =%d AND tool_name='BLOGS' AND `sub_tool_id`>0
 	GROUP BY `sub_tool_id`)a
@@ -87,7 +87,7 @@ foreach ($queryResult as $row) {
  */
 
  $sql = " SELECT d.title,  totalCount, uniqueCount, d.totalPosts FROM
-	(SELECT `main_tool_id` , SUM( `counter`) as totalCount, COUNT(`member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
+	(SELECT `main_tool_id` , SUM( `counter`) as totalCount, COUNT(DISTINCT `member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
 	FROM `%stool_track`
 	WHERE `course_id` =%d AND tool_name='FORUMS'
 	GROUP BY `main_tool_id`)a
