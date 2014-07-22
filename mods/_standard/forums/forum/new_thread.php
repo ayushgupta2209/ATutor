@@ -159,7 +159,7 @@ if (isset($_POST['cancel'])) {
 				$body .= $_POST['body']."\n";
 				$mail->FromName = $_config['site_name'];
 				$mail->From     = $_config['contact_email'];
-				$mail->Subject = _AT('thread_notify1').':'.$_POST['parent_name'];
+				$mail->Subject = _AT('thread_notify1').': '.$_POST['parent_name'];
 				$mail->Body    = $body;
 
 				if(!$mail->Send()) {
@@ -200,6 +200,12 @@ if (isset($_POST['cancel'])) {
 		$msg->addFeedback('ACTION_COMPLETED_SUCCESSFULLY');
 		header('Location: '.url_rewrite('mods/_standard/forums/forum/view.php?fid='.$fid.SEP.'pid='.$_POST['parent_id'].SEP.'page='.$_POST['page'], AT_PRETTY_URL_IS_HEADER));
 		exit;
+	} else if(isset($missing_fields)){
+	    $msg->addError(array('EMPTY_FIELDS', $missing_fields));
+	    if(strstr($_SERVER['HTTP_REFERER'], "view.php" )){
+			header('Location: '.url_rewrite('mods/_standard/forums/forum/view.php?fid='.$fid.SEP.'pid='.$_POST['parent_id'].SEP.'page='.$_POST['page'], AT_PRETTY_URL_IS_HEADER));
+			exit;
+	    }	
 	}
 }
 
