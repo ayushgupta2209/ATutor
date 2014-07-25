@@ -47,8 +47,8 @@ foreach ($queryResult as $row) {
  * Fetch Data for Blog
  * Process and sends the required values to template file
  */
-$sql = " SELECT d.title,  totalCount, uniqueCount, d.totalComments FROM
-	(SELECT `sub_tool_id` , SUM( `counter`) as totalCount, COUNT(DISTINCT `member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
+$sql = " SELECT a.main_tool_id, a.sub_tool_id, d.title,  totalCount, uniqueCount, d.totalComments FROM
+	(SELECT `main_tool_id`, `sub_tool_id` , SUM( `counter`) as totalCount, COUNT(DISTINCT `member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
 	FROM `%stool_track`
 	WHERE `course_id` =%d AND tool_name='BLOGS' AND `sub_tool_id`>0
 	GROUP BY `sub_tool_id`)a
@@ -70,14 +70,20 @@ foreach ($queryResult as $row) {
 	if($blogkeyVal['maxVisits'][1] < $row['totalCount']) {
 		$blogkeyVal['maxVisits'][0] = $row['title'];
 		$blogkeyVal['maxVisits'][1] = $row['totalCount'];
+		$blogkeyVal['maxVisits'][2] = $row['main_tool_id'];
+		$blogkeyVal['maxVisits'][3] = $row['sub_tool_id'];
 	}
 	if($blogkeyVal['maxVisitors'][1] < $row['uniqueCount']) {
 		$blogkeyVal['maxVisitors'][0] = $row['title'];
 		$blogkeyVal['maxVisitors'][1] = $row['uniqueCount'];
+		$blogkeyVal['maxVisitors'][2] = $row['main_tool_id'];
+		$blogkeyVal['maxVisitors'][3] = $row['sub_tool_id'];
 	}
 	if($blogkeyVal['maxComments'][1] < $row['totalComments']) {
 		$blogkeyVal['maxComments'][0] = $row['title'];
 		$blogkeyVal['maxComments'][1] = $row['totalComments'];
+		$blogkeyVal['maxComments'][2] = $row['main_tool_id'];
+		$blogkeyVal['maxComments'][3] = $row['sub_tool_id'];
 	}
 }
 
@@ -86,7 +92,7 @@ foreach ($queryResult as $row) {
  * Process and sends the required values to template file
  */
 
- $sql = " SELECT d.title,  totalCount, uniqueCount, d.totalPosts FROM
+ $sql = " SELECT a.main_tool_id, d.title,  totalCount, uniqueCount, d.totalPosts FROM
 	(SELECT `main_tool_id` , SUM( `counter`) as totalCount, COUNT(DISTINCT `member_id`) as uniqueCount, SEC_TO_TIME(SUM(`duration`)) as totalTime
 	FROM `%stool_track`
 	WHERE `course_id` =%d AND tool_name='FORUMS'
@@ -109,14 +115,17 @@ foreach ($queryResult as $row) {
 	if($forumkeyVal['maxVisits'][1] < $row['totalCount']) {
 		$forumkeyVal['maxVisits'][0] = $row['title'];
 		$forumkeyVal['maxVisits'][1] = $row['totalCount'];
+		$forumkeyVal['maxVisits'][2] = $row['main_tool_id'];
 	}
 	if($forumkeyVal['maxVisitors'][1] < $row['uniqueCount']) {
 		$forumkeyVal['maxVisitors'][0] = $row['title'];
 		$forumkeyVal['maxVisitors'][1] = $row['uniqueCount'];
+		$forumkeyVal['maxVisitors'][2] = $row['main_tool_id'];
 	}
 	if($forumkeyVal['maxPosts'][1] < $row['totalPosts']) {
 		$forumkeyVal['maxPosts'][0] = $row['title'];
 		$forumkeyVal['maxPosts'][1] = $row['totalPosts'];
+		$forumkeyVal['maxPosts'][2] = $row['main_tool_id'];
 	}
 }
  
