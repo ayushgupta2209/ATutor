@@ -32,12 +32,11 @@ $rows_hits = queryDB($sql, array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION
 
 $savant->assign('rows_hits', $rows_hits);
 $savant->display('student_stats/forums_details.tmpl.php');
-require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
-<script>
-	<?php	
+require(AT_INCLUDE_PATH.'footer.inc.php'); 
+echo "<script>";	
 	if($_SESSION['is_admin'] != 1) {
 		require('../../../jscripts/d3js/d3.v3.min.js');
 		require('js/content_pie_chart.js');
 	}
-	?>
-</script>
+echo "</script>";
+?>
