@@ -15,60 +15,22 @@
 define('AT_INCLUDE_PATH', '../../../include/');
 require(AT_INCLUDE_PATH.'vitals.inc.php');
 require(AT_INCLUDE_PATH.'header.inc.php');
-?>
 
-<div id="piechart" align= "center"></div>
-<table class="data static" summary="">
-	<thead>
-		<tr>
-			<th scope="col"><?php echo _AT('page'); ?></th>
-			<th scope="col"><?php echo _AT('visits'); ?></th>
-			<th scope="col"><?php echo _AT('duration'); ?></th>
-			<th scope="col"><?php echo _AT('last_accessed'); ?></th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-			$sql = "SELECT content_id AS tool_id, COUNT(*) AS unique_hits,
-				SUM(counter) AS total_hits,
-				SEC_TO_TIME(SUM(duration)/SUM(counter)) AS average_duration,
-				SEC_TO_TIME(SUM(duration)) AS total_duration, last_accessed
-			FROM %smember_track
-			WHERE course_id=%d AND member_id=%d GROUP BY content_id ORDER BY total_hits DESC";
-			$rows_hits = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], $_SESSION['member_id']));
-			if(count($rows_hits) > 0) {
-				foreach($rows_hits as &$row){
-					echo '<tr>';
-					echo '<td><a href='.AT_BASE_HREF.url_rewrite('content.php?cid='.$row['tool_id']). '>' . $contentManager->_menu_info[$row['tool_id']]['title'] . '</a></td>';
-					echo '<td>' . $row['total_hits'] . '</td>';
-					echo '<td>' . $row['total_duration'] . '</td>';
-					if ($row['last_accessed'] == '') {
-						echo '<td>' . _AT('na') . '</td>';
-					} 
-					else {
-						echo '<td>' . AT_date(_AT('forum_date_format'), $row['last_accessed'], AT_DATE_MYSQL_DATETIME) . '</td>';
-					}
-					echo '</tr>';
-					$row['tool_id'] = $contentManager->_menu_info[$row['tool_id']]['title'];
-				} //end foreach
-				echo '</tbody>';
-			}
-			else {
-				if($_SESSION['is_admin'] == 1){
-					$msg->printInfos('TRACKING_NO');
-				}
-				echo '<tr><td colspan="4">' . _AT('none_found') . '</td></tr>';
-				echo '</tbody>';
-			}
-		?>
-	</tbody>
-</table>
-<?php require(AT_INCLUDE_PATH.'footer.inc.php'); ?>
-<script>
-	<?php	
+$sql = "SELECT content_id AS tool_id, COUNT(*) AS unique_hits,
+		SUM(counter) AS total_hits,
+		SEC_TO_TIME(SUM(duration)/SUM(counter)) AS average_duration,
+		SEC_TO_TIME(SUM(duration)) AS total_duration, last_accessed
+	FROM %smember_track
+	WHERE course_id=%d AND member_id=%d GROUP BY content_id ORDER BY total_hits DESC";
+$rows_hits = queryDB($sql, array(TABLE_PREFIX, $_SESSION['course_id'], $_SESSION['member_id']));
+
+$savant->assign('rows_hits', $rows_hits);
+$savant->display('student_stats/content_details.tmpl.php');
+require(AT_INCLUDE_PATH.'footer.inc.php'); 
+echo "<script>";	
 	if($_SESSION['is_admin'] != 1) {
 		require('../../../jscripts/d3js/d3.v3.min.js');
 		require('js/content_pie_chart.js');
 	}
-	?>
-</script>
+echo "</script>";
+?>

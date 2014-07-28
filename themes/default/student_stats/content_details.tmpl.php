@@ -4,20 +4,19 @@
 <table class="data static" summary="">
 	<thead>
 		<tr>
-			<th scope="col"><?php echo "Blog"; ?></th>
-			<th scope="col"><?php echo "Average Duration"; ?></th>
+			<th scope="col"><?php echo _AT('page'); ?></th>
+			<th scope="col"><?php echo _AT('visits'); ?></th>
 			<th scope="col"><?php echo _AT('duration'); ?></th>
 			<th scope="col"><?php echo _AT('last_accessed'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php
-
-		if(count($this->rows_hits) > 0) {
+			if(count($this->rows_hits) > 0) {
 				foreach($this->rows_hits as &$row){
 					echo '<tr>';
-					echo '<td><a href='.AT_BASE_HREF.url_rewrite('mods/_standard/blogs/post.php?ot=1&oid='.$row['main_tool_id'].'&id='.$row['tool_id']).'>' . $row['title']. '</a></td>';
-					echo '<td>' . $row['average_duration'] . '</td>';
+					echo '<td><a href='.AT_BASE_HREF.url_rewrite('content.php?cid='.$row['tool_id']). '>' . $contentManager->_menu_info[$row['tool_id']]['title'] . '</a></td>';
+					echo '<td>' . $row['total_hits'] . '</td>';
 					echo '<td>' . $row['total_duration'] . '</td>';
 					if ($row['last_accessed'] == '') {
 						echo '<td>' . _AT('na') . '</td>';
@@ -26,7 +25,7 @@
 						echo '<td>' . AT_date(_AT('forum_date_format'), $row['last_accessed'], AT_DATE_MYSQL_DATETIME) . '</td>';
 					}
 					echo '</tr>';
-					$row['tool_id'] = $row['title'];
+					$row['tool_id'] = $contentManager->_menu_info[$row['tool_id']]['title'];
 				} //end foreach
 				echo '</tbody>';
 			}
