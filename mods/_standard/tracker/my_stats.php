@@ -45,7 +45,7 @@ $rows_hits2 = queryDB($sql2, array(TABLE_PREFIX, $_SESSION['course_id'], TABLE_P
 $rows_hits = array_merge($rows_hits1,$rows_hits2);
 
 $savant->assign('rows_hits', $rows_hits);
-$savant->display('instructor/statistics/my_stats.tmpl.php');
+$savant->display('student_stats/my_stats.tmpl.php');
 require(AT_INCLUDE_PATH.'footer.inc.php'); 
 echo "<script>";
 		

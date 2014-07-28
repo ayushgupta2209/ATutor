@@ -1,6 +1,5 @@
 <?php global $contentManager;?>
-<?php require('./css/student_bar_graph.css'); ?>
-
+<body>
 <div id = "bargraph" align = "center">  </div>
 
 <table class="data static" >
