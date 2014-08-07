@@ -138,16 +138,18 @@ foreach ($queryResult as $row) {
 			(SELECT a.member_id , SUM(a.duration) as time 
 		FROM(SELECT member_id, SUM(duration) as duration
 			FROM %smember_track
+			WHERE course_id = %d
 			GROUP BY member_id
 		UNION ALL
 			SELECT member_id, SUM(duration) as duration
 			FROM %stool_track
+			WHERE course_id = %d
 			GROUP BY member_id) a
 		GROUP BY a.member_id
         ORDER BY time desc )b
 	LIMIT 1";
 
-$queryResult = queryDB($sql, array(TABLE_PREFIX, TABLE_PREFIX));
+$queryResult = queryDB($sql, array(TABLE_PREFIX,$_SESSION['course_id'], TABLE_PREFIX, $_SESSION['course_id']));
 $member_id = $queryResult[0]['member_id'];
 $average = $queryResult[0]['AVG'];
 $activeCount = $queryResult[0]['count'];

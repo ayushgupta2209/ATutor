@@ -82,7 +82,7 @@
 			</thead>
 			<tr>
 				<td	title= "Percentage of enrolled Students active">	Percent of Active Students	</td>
-				<td><?php echo$this->percentage; ?></td>
+				<td><?php echo$this->percentage."%"; ?></td>
 			</tr>
 			<tr>
 				<td title = "Average time devoted by students">	Average Time Devoted	</td>
