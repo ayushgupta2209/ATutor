@@ -11,7 +11,7 @@
 		</tr>
 	</thead>
 	<?php
-		if(count($this->rows_hits) > 0){
+		if(count($this->rows_hits) > 0 && $_SESSION['is_admin'] != 1){
 			foreach($this->rows_hits as $row){
 				echo '<tr>';
 				echo '<td><a href='.AT_BASE_HREF.url_rewrite('mods/_standard/tracker/'.strtolower($row['tool']).'_details.php').'>' . $row['tool'] . '</a> </td>';
@@ -23,9 +23,6 @@
 			echo '</tbody>';
 		}
 		else {
-			if($_SESSION['is_admin'] == 1){
-				$msg->printInfos('TRACKING_NO');
-			} 
 			echo '<tr><td colspan="4">' . _AT('none_found') . '</td></tr>';
 			echo '</tbody>';
 		}
