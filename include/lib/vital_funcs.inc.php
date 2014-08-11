@@ -1156,25 +1156,27 @@ function tool_origin($path=''){
  * @ arg: $fid = forum Id , $ pid = post Id
  */
 function save_last_fid($fid = 0, $pid = 0){
-			
-	$curr_time = time();
-	$tool_name = "FORUMS";
-	if(isset($_SESSION['fid']) && isset($_SESSION['pid']) && isset($_SESSION['pid_time'])){
-		$diff = $curr_time - $_SESSION['pid_time'];
-		if ($diff > 0) {
-			$is_tracked = queryDB("SELECT * FROM %stool_track WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d",array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['fid'], $_SESSION['pid']));
-			if(count($is_tracked) != 0){
-				$sql = "UPDATE %stool_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d";
-				$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['fid'], $_SESSION['pid'] ));
-			} else{
-				$result = queryDB("INSERT INTO %stool_track VALUES (%d, %d, %d, '%s', %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $tool_name, $_SESSION['fid'], $_SESSION['pid'], $diff));
+	if (!$_SESSION['is_admin']   && 
+	!$_SESSION['privileges']) {		
+		$curr_time = time();
+		$tool_name = "FORUMS";
+		if(isset($_SESSION['fid']) && isset($_SESSION['pid']) && isset($_SESSION['pid_time'])){
+			$diff = $curr_time - $_SESSION['pid_time'];
+			if ($diff > 0) {
+				$is_tracked = queryDB("SELECT * FROM %stool_track WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d",array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['fid'], $_SESSION['pid']));
+				if(count($is_tracked) != 0){
+					$sql = "UPDATE %stool_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d";
+					$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['fid'], $_SESSION['pid'] ));
+				} else{
+					$result = queryDB("INSERT INTO %stool_track VALUES (%d, %d, %d, '%s', %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $tool_name, $_SESSION['fid'], $_SESSION['pid'], $diff));
+				}
 			}
 		}
-	}
-	if($fid != 0){
-		$_SESSION['pid_time'] = $curr_time;
-		$_SESSION['fid']=$fid;
-		$_SESSION['pid']=$pid;
+		if($fid != 0){
+			$_SESSION['pid_time'] = $curr_time;
+			$_SESSION['fid']=$fid;
+			$_SESSION['pid']=$pid;
+		}
 	}
 }
 
@@ -1187,25 +1189,27 @@ function save_last_fid($fid = 0, $pid = 0){
  */
  
 function save_last_bpid($gid = 0, $bpid = 0){
-			
-	$curr_time = time();
-	$tool_name = "BLOGS";
-	if((isset($_SESSION['gid']) && isset($_SESSION['bpid'])) && isset($_SESSION['bpid_time'])){
-		$diff = $curr_time - $_SESSION['bpid_time'];
-		if ($diff > 0) {
-			$is_tracked = queryDB("SELECT * FROM %stool_track WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d",array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['gid'], $_SESSION['bpid']));
-			if(count($is_tracked) != 0){
-				$sql = "UPDATE %stool_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d";
-				$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['gid'], $_SESSION['bpid'] ));
-			} else {
-				$result = queryDB("INSERT INTO %stool_track VALUES (%d, %d, %d, '%s', %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $tool_name, $_SESSION['gid'], $_SESSION['bpid'], $diff));
+	if (!$_SESSION['is_admin']   && 
+	!$_SESSION['privileges']) {		
+		$curr_time = time();
+		$tool_name = "BLOGS";
+		if((isset($_SESSION['gid']) && isset($_SESSION['bpid'])) && isset($_SESSION['bpid_time'])){
+			$diff = $curr_time - $_SESSION['bpid_time'];
+			if ($diff > 0) {
+				$is_tracked = queryDB("SELECT * FROM %stool_track WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d",array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['gid'], $_SESSION['bpid']));
+				if(count($is_tracked) != 0){
+					$sql = "UPDATE %stool_track SET counter=counter+1, duration=duration+$diff, last_accessed=NOW() WHERE member_id=%d AND content_id=%d AND tool_name='%s' AND main_tool_id=%d AND sub_tool_id=%d";
+					$rows = queryDB($sql,array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['s_cid'], $tool_name, $_SESSION['gid'], $_SESSION['bpid'] ));
+				} else {
+					$result = queryDB("INSERT INTO %stool_track VALUES (%d, %d, %d, '%s', %d, %d, 1, %d, NOW())", array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION['course_id'],$_SESSION['s_cid'], $tool_name, $_SESSION['gid'], $_SESSION['bpid'], $diff));
+				}
 			}
 		}
-	}
-	if($gid != 0){
-		$_SESSION['bpid_time'] = $curr_time;
-		$_SESSION['gid']=$gid;
-		$_SESSION['bpid']=$bpid;
+		if($gid != 0){
+			$_SESSION['bpid_time'] = $curr_time;
+			$_SESSION['gid']=$gid;
+			$_SESSION['bpid']=$bpid;
+		}
 	}
 }
 
