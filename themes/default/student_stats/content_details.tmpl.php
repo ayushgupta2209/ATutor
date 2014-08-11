@@ -12,7 +12,7 @@
 	</thead>
 	<tbody>
 		<?php
-			if(count($this->rows_hits) > 0) {
+			if(count($this->rows_hits) > 0 && $_SESSION['is_admin'] != 1) {
 				foreach($this->rows_hits as &$row){
 					echo '<tr>';
 					echo '<td><a href='.AT_BASE_HREF.url_rewrite('content.php?cid='.$row['tool_id']). '>' . $contentManager->_menu_info[$row['tool_id']]['title'] . '</a></td>';
@@ -30,9 +30,6 @@
 				echo '</tbody>';
 			}
 			else {
-				if($_SESSION['is_admin'] == 1){
-					$msg->printInfos('TRACKING_NO');
-				}
 				echo '<tr><td colspan="4">' . _AT('none_found') . '</td></tr>';
 				echo '</tbody>';
 			}

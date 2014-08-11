@@ -16,6 +16,9 @@ define('AT_INCLUDE_PATH', '../../../include/');
 require(AT_INCLUDE_PATH.'vitals.inc.php');
 require(AT_INCLUDE_PATH.'header.inc.php');
 
+if($_SESSION['is_admin'] == 1){
+    $msg->printInfos('TRACKING_NO');
+}
 $sql = "SELECT a.main_tool_id as tool_id, b.title, a.average_duration, a.total_duration, a.last_accessed FROM
 		(SELECT main_tool_id, SEC_TO_TIME(SUM(`duration`)/SUM(`counter`)) as average_duration, 
 		SEC_TO_TIME(SUM(`duration`)) as total_duration, max(last_accessed) as last_accessed
@@ -33,10 +36,12 @@ $rows_hits = queryDB($sql, array(TABLE_PREFIX, $_SESSION['member_id'], $_SESSION
 $savant->assign('rows_hits', $rows_hits);
 $savant->display('student_stats/forums_details.tmpl.php');
 require(AT_INCLUDE_PATH.'footer.inc.php'); 
-echo "<script>";	
-	if($_SESSION['is_admin'] != 1) {
-		require('../../../jscripts/d3js/d3.v3.min.js');
-		require('js/content_pie_chart.js');
-	}
-echo "</script>";
+	
+if($_SESSION['is_admin'] != 1) {
+	echo "<script>";
+	require('../../../jscripts/d3js/d3.v3.min.js');
+	require('js/content_pie_chart.js');
+	echo "</script>";
+}
+
 ?>

@@ -171,7 +171,10 @@ $activeStudent = $queryResult[0]['first_name']." ".$queryResult[0]['last_name'];
 $savant->assign('contentkeyVal', $contentkeyVal);
 $savant->assign('blogkeyVal', $blogkeyVal);
 $savant->assign('forumkeyVal', $forumkeyVal);
-$savant->assign('percentage', (int)(($activeCount/$totalCount)*100));
+if($totalCount)
+	$savant->assign('percentage', (int)(($activeCount/$totalCount)*100));
+else
+	$savant->assign('percentage', 0);
 $savant->assign('average', $average);
 $savant->assign('activeStudent', $activeStudent);
 $savant->display('instructor/statistics/student_tool_stats.tmpl.php');

@@ -30,9 +30,6 @@
 				echo '</tbody>';
 			}
 			else {
-				if($_SESSION['is_admin'] == 1){
-					$msg->printInfos('TRACKING_NO');
-				}
 				echo '<tr><td colspan="4">' . _AT('none_found') . '</td></tr>';
 				echo '</tbody>';
 			}
