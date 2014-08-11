@@ -1,6 +1,10 @@
 <?php global $contentManager;?>
 <body>
-<div id="piechart" align= "center"></div>
+
+<?php
+	if(count($this->rows_hits) > 0 && $_SESSION['is_admin'] != 1)
+		echo '<div id="piechart" align= "center"></div>' ; 
+?>
 <table class="data static" summary="">
 	<thead>
 		<tr>
