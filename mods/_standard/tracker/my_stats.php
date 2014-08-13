@@ -49,11 +49,14 @@ else {
 	$rows_hits = array_merge($rows_hits1,$rows_hits2);
 
 	$savant->assign('rows_hits', $rows_hits);
-	echo "<script>";
-	require('../../../jscripts/d3js/d3.v3.min.js'); 
-	require('js/student_bar_graph.js');	
-	echo "</script> ";
+	
 }
 $savant->display('student_stats/my_stats.tmpl.php');
 require(AT_INCLUDE_PATH.'footer.inc.php'); 
+if($_SESSION['is_admin'] != 1) {
+	echo "<script>";
+	require('../../../jscripts/d3js/d3.v3.min.js');
+	require('js/student_bar_graph.js');
+	echo "</script>";
+}
 ?>

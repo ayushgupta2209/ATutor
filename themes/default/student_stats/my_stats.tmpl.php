@@ -1,7 +1,9 @@
 <?php global $contentManager;?>
 <body>
-<div id = "bargraph" align = "center">  </div>
-
+<?php
+	if(count($this->rows_hits) > 0 && $_SESSION['is_admin'] != 1)
+		echo '<div id="bargraph" align= "center"></div>' ; 
+?>
 <table class="data static" >
 	<thead>
 		<tr>
